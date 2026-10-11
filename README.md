@@ -1,4 +1,4 @@
-# gatha-checks
+#search-check-aieconomy
 
 Shareable AI search check pages, one per prospect, served at `check.gatha.ai/[business-slug]/`.
 
