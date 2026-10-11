@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Economy AI search check | AI Economy</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--indigo:#111111;--indigo2:#1C1C1E;--page:#F5F5F7;--ink:#111111;--muted:#6B6B70;--hero-muted:#C7C7CC;--mint:#2BB8C4;--blue:#0E9AA7;--blue2:#0B7F8A;--good:#1E9E5A;--mid:#D98B00;--bad:#E8663D;--line:#E5E5EA;--card-sh:0 20px 50px -30px rgba(0,0,0,.25)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--page)}
+  body{font-family:Poppins,system-ui,sans-serif;background:var(--page);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .hero{background:var(--indigo);color:#fff;padding:0 0 120px;position:relative;overflow:hidden}
+  .hero::before{content:none}
+  .hero::after{content:none}
+  .wrap{max-width:860px;margin:0 auto;padding:0 20px;position:relative}
+  header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 56px}
+  .logo{display:inline-block;line-height:0}
+  .logo svg{display:block}
+  .tag{font-size:12px;color:var(--hero-muted);text-transform:uppercase;letter-spacing:.12em}
+  .pill{display:inline-block;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:18px}
+  .pill::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mint);margin-right:8px;vertical-align:middle}
+  h1{font-size:clamp(28px,4.6vw,42px);font-weight:700;line-height:1.15;letter-spacing:-.02em;margin-bottom:14px;max-width:780px}
+  h1 em{font-style:normal;color:var(--mint)}
+  .lead{color:var(--hero-muted);font-size:17px;max-width:600px}
+  .sheet{margin-top:-80px;position:relative}
+  .score{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+  .engine{background:#fff;border-radius:18px;padding:22px 20px;box-shadow:var(--card-sh)}
+  .engine .name{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .engine .verdict{font-size:22px;font-weight:700;line-height:1.2;letter-spacing:-.01em}
+  .engine .note{font-size:13px;color:var(--muted);margin-top:8px}
+  .good .verdict{color:var(--good)} .mid .verdict{color:var(--mid)} .bad .verdict{color:var(--bad)}
+  section{margin-bottom:36px}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:0 0 14px}
+  .prompt{background:#fff;border-radius:18px;padding:22px 24px;box-shadow:var(--card-sh);margin-bottom:14px}
+  .prompt .q{font-weight:600;font-size:18px}
+  .prompt .q::before{content:"“";color:var(--blue)} .prompt .q::after{content:"”";color:var(--blue)}
+  .ev{background:#fff;border-radius:18px;padding:18px;box-shadow:var(--card-sh);margin-bottom:14px}
+  .ev .t{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  .ev .t b{font-weight:600;display:inline-flex;align-items:center;gap:8px}
+  .ev .t b svg{flex:none}
+  .ev .t span{font-size:12px;color:var(--muted);background:var(--page);padding:4px 10px;border-radius:999px}
+  .ev img{width:100%;border-radius:10px;border:1px solid var(--line);display:block}
+  .ev .cap{font-size:14px;color:var(--ink);margin-top:10px}
+  .tabs{background:#fff;border-radius:18px;box-shadow:var(--card-sh);padding:10px 18px 18px}
+  .tabs input{position:absolute;opacity:0;pointer-events:none}
+  .tabs .bar{display:flex;gap:6px;border-bottom:1px solid var(--line);margin:0 -18px 16px;padding:0 12px}
+  .tabs label{display:inline-flex;align-items:center;gap:8px;padding:12px 14px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tabs label svg{flex:none}
+  .tabs .pane{display:none}
+  #t1:checked~.bar label[for=t1],#t2:checked~.bar label[for=t2],#t3:checked~.bar label[for=t3]{color:var(--ink);border-bottom-color:var(--blue)}
+  #t1:checked~.p1,#t2:checked~.p2,#t3:checked~.p3{display:block}
+  .ev{padding:0;box-shadow:none;margin:0}
+  .why{background:#fff;border-radius:18px;padding:22px 24px;box-shadow:var(--card-sh);border-left:4px solid var(--blue);font-size:15px}
+  .cta{background:var(--indigo);color:#fff;border-radius:22px;padding:38px 28px;text-align:center;position:relative;overflow:hidden}
+  .cta h3{font-size:26px;font-weight:700;margin-bottom:10px;letter-spacing:-.02em}
+  .cta p{color:var(--hero-muted);margin-bottom:24px;max-width:560px;margin-left:auto;margin-right:auto}
+  .btn{display:inline-block;background:var(--blue);color:#fff;font-weight:600;padding:14px 26px;border-radius:12px;text-decoration:none;font-size:15px}
+  .btn:hover{background:var(--blue2)}
+  .btn.ghost{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);margin-left:10px}
+  .btn.ghost:hover{background:rgba(255,255,255,.14)}
+  .cta .alt{margin-top:18px;font-size:14px;color:var(--hero-muted)} .cta .alt a{color:var(--mint);text-decoration:none;font-weight:500}
+  .cta .who{font-size:14px;color:var(--hero-muted);max-width:520px;margin:-8px auto 24px}
+  .cta .alt{margin-top:20px;font-size:14px;color:var(--hero-muted)}
+  .cta .alt a{color:var(--mint);text-decoration:none;font-weight:500}
+  footer{padding:40px 0 48px;text-align:center;font-size:13px;color:var(--muted)}
+  footer a{color:var(--blue);text-decoration:none;font-weight:500}
+  @media (max-width:600px){.score{grid-template-columns:1fr}.btn.ghost{margin:10px 0 0}.hero{padding-bottom:100px}}
+  .faq{background:#fff;border-radius:18px;box-shadow:var(--card-sh);padding:6px 24px}
+  .faq details{border-bottom:1px solid var(--line);padding:16px 0}
+  .faq details:last-child{border-bottom:0}
+  .faq summary{font-weight:600;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"+";color:var(--blue);font-size:20px;font-weight:500}
+  .faq details[open] summary::after{content:"–"}
+  .faq p{color:var(--muted);font-size:14.5px;margin-top:10px}
+  .summary{background:#fff;border-radius:18px;box-shadow:var(--card-sh);padding:22px 24px;display:flex;align-items:center;gap:18px;margin-bottom:14px}
+  .summary .big{font-size:40px;font-weight:700;line-height:1;color:var(--bad);letter-spacing:-.02em;white-space:nowrap}
+  .summary .big small{font-size:16px;color:var(--muted);font-weight:500;letter-spacing:0}
+  .summary p{font-size:15px;color:var(--ink)}
+  .engine{position:relative;overflow:hidden}
+  .engine::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--bad)}
+  .engine.good::before{background:var(--good)} .engine.mid::before{background:var(--mid)}
+  .engine .verdict{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;padding:7px 12px;border-radius:999px;background:rgba(232,102,61,.1);margin:4px 0 10px}
+  .engine .verdict::before{content:"✕";font-size:12px}
+  .engine.good .verdict{background:rgba(30,158,90,.1)} .engine.good .verdict::before{content:"✓"}
+  .engine.mid .verdict{background:rgba(217,139,0,.12)} .engine.mid .verdict::before{content:"•"}
+  .engine .note{font-size:13px;color:var(--muted);margin-top:0}
+  .engine .note b{display:block;color:var(--ink);font-weight:600;margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chips span{background:var(--page);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12.5px;color:var(--ink)}
+  .svc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .svc .c{background:#fff;border-radius:18px;box-shadow:var(--card-sh);padding:22px 20px;position:relative;overflow:hidden}
+  .svc .c::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--blue)}
+  .svc .c.w::before{background:#111111} .svc .c.d::before{background:#2BB8C4}
+  .svc .tag{display:inline-block;color:#fff;background:var(--blue);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px;margin-bottom:12px}
+  .svc .c.w .tag{background:#111111} .svc .c.d .tag{background:#2BB8C4}
+  .svc h3{font-size:17px;font-weight:600;margin-bottom:6px}
+  .svc p{font-size:14px;color:var(--muted)}
+  @media (max-width:600px){.svc{grid-template-columns:1fr}.summary{flex-direction:column;align-items:flex-start}}
+  .hand{background:#fff;border-radius:18px;box-shadow:var(--card-sh);padding:24px 26px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:14px;border-left:4px solid var(--blue)}
+  .hand h3{font-size:19px;font-weight:600;margin-bottom:4px}
+  .hand p{font-size:14.5px;color:var(--muted)}
+  .hand .btn{flex:none}
+  .more{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:14px;font-weight:600;color:var(--blue);text-decoration:none;border:1px solid var(--blue);border-radius:999px;padding:8px 16px}
+  .more:hover{background:var(--blue);color:#fff}
+  .findings+.more{margin:0 0 18px}
+  @media (max-width:600px){.hand{flex-direction:column;align-items:flex-start}}
+  .notseo{margin:14px 0 0;background:var(--indigo);color:#fff;border-radius:18px;padding:22px 26px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+  .notseo .k{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+  .notseo .k em{font-style:normal;color:var(--mint)}
+  .notseo p{color:var(--hero-muted);font-size:14.5px}
+  .notseo p b{color:#fff;font-weight:600}
+  @media (max-width:600px){.notseo{grid-template-columns:1fr}}
+  .look{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
+  .look .i{background:#fff;border-radius:14px;box-shadow:var(--card-sh);padding:16px 18px}
+  .look .i b{display:block;font-weight:600;margin-bottom:4px;font-size:15px}
+  .look .i p{font-size:13.5px;color:var(--muted)}
+  .look .i .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:rgba(26,115,232,.12);color:var(--blue);font-size:12px;font-weight:700;margin-bottom:10px}
+  @media (max-width:600px){.look{grid-template-columns:1fr}}
+  .findings{background:#fff;border-radius:18px;box-shadow:var(--card-sh);padding:6px 26px;margin:14px 0}
+  .findings .row{display:grid;grid-template-columns:170px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--line);align-items:start}
+  .findings .row:last-child{border-bottom:0}
+  .findings .lab{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);padding-top:3px}
+  .findings .val{font-size:15.5px;color:var(--ink)}
+  .findings .val b{font-weight:600}
+  .findings .big{font-size:34px;font-weight:700;color:var(--bad);letter-spacing:-.02em;line-height:1;margin-right:10px;vertical-align:-4px}
+  .findings .big small{font-size:15px;color:var(--muted);font-weight:500}
+  @media (max-width:600px){.findings .row{grid-template-columns:1fr;gap:6px}}
+  .stats{background:var(--indigo);color:#fff;border-radius:18px;padding:26px 26px 20px;margin-top:14px}
+  .stats h3{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
+  .stats h3 em{font-style:normal;color:var(--mint)}
+  .stats .g{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .stats .s{border-top:1px solid rgba(255,255,255,.14);padding-top:14px}
+  .stats .s .n{font-size:30px;font-weight:700;line-height:1.05;letter-spacing:-.02em}
+  .stats .s .n small{font-size:14px;font-weight:500;color:var(--hero-muted)}
+  .stats .s p{font-size:13.5px;color:var(--hero-muted);margin-top:6px}
+  .stats .src{font-size:11.5px;color:rgba(255,255,255,.5);margin-top:16px}
+  .stats .src a{color:rgba(255,255,255,.65)}
+  @media (max-width:600px){.stats .g{grid-template-columns:1fr}}
+  .lead-score{display:flex;align-items:center;gap:18px;margin:26px 0 0;padding:18px 22px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;max-width:620px}
+  .lead-score .num{font-size:44px;font-weight:700;line-height:1;letter-spacing:-.03em;color:var(--bad);white-space:nowrap}
+  .lead-score .num small{font-size:18px;color:var(--hero-muted);font-weight:500;letter-spacing:0}
+  .lead-score p{color:#fff;font-size:15.5px;line-height:1.4}
+  .lead-score p b{font-weight:600}
+  @media (max-width:600px){.lead-score{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="wrap">
+    <header>
+      <a class="logo" href="https://aieconomy.ai" aria-label="AI Economy" style="color:#fff;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:.04em;line-height:1">AI ECONOMY</a>
+      <div class="tag">AI search check · 11 Oct 2026</div>
+    </header>
+    <div class="pill">We asked ChatGPT, Claude and Perplexity</div>
+    <h1>“Who can help my business get started with AI in Australia?”</h1>
+    <p class="lead"><strong style="color:#fff;font-weight:600">Here's where <em style="font-style:normal;color:var(--mint)">AI Economy</em> lands.</strong> One question your customers ask, put to three AI engines. Screenshots included. Be seen in search.</p>
+    <div class="lead-score"><div class="num">0<small> / 3</small></div><p><b>engines named AI Economy.</b><br>Every one pointed to government programs or another consultancy instead.</p></div>
+  </div>
+</div>
+
+<div class="wrap sheet">
+  <div class="score">
+    <div class="engine bad"><div class="name"><svg width="18" height="18" fill="#10A37F" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg><span>ChatGPT</span></div><div class="verdict">Not mentioned</div><div class="note"><b>Named instead</b><div class="chips"><span>AI Adopt Centres</span><span>Digital Solutions</span><span>ARM Hub</span><span>Netriq AI</span><span>Kersai</span><span>AI Consulting Group</span></div></div></div>
+    <div class="engine bad"><div class="name"><svg width="18" height="18" fill="#D97757" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg><span>Claude</span></div><div class="verdict">Not mentioned</div><div class="note"><b>Named instead</b><div class="chips"><span>AI Adopt Centres</span><span>Boab AI</span><span>elevenM</span><span>AdoptAI</span><span>SA AI Capability Pilot</span></div></div></div>
+    <div class="engine bad"><div class="name"><svg width="18" height="18" fill="#20808D" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.3977 7.0896h-2.3106V.0676l-7.5094 6.3542V.1577h-1.1554v6.1966L4.4904 0v7.0896H1.6023v10.3976h2.8882V24l6.932-6.3591v6.2005h1.1554v-6.0469l6.9318 6.1807v-6.4879h2.8882V7.0896zm-3.4657-4.531v4.531h-5.355l5.355-4.531zm-13.2862.0676 4.8691 4.4634H5.6458V2.6262zM2.7576 16.332V8.245h7.8476l-6.1149 6.1147v1.9723H2.7576zm2.8882 5.0404v-3.8852h.0001v-2.6488l5.7763-5.7764v7.0111l-5.7764 5.2993zm12.7086.0248-5.7766-5.1509V9.0618l5.7766 5.7766v6.5588zm2.8882-5.0652h-1.733v-1.9723L13.3948 8.245h7.8478v8.087z"/></svg><span>Perplexity</span></div><div class="verdict">Not mentioned</div><div class="note"><b>Named instead</b><div class="chips"><span>SMEC AI</span><span>ARM Hub</span><span>Mindset A.I</span><span>AI Lab Australia</span><span>Protiviti</span><span>NAB</span></div></div></div>
+  </div>
+  <div class="findings">
+    <div class="row"><div class="lab">What it means</div><div class="val">When a business owner asks an AI where to start, AI Economy isn’t in the answer. Government centres and a handful of consultancies are, and they get the enquiry.</div></div>
+    <div class="row"><div class="lab">What to do</div><div class="val">A page that answers this exact question, a listing in the National AI Centre directory, and a consistent description of AI Economy across the site, LinkedIn and Google. Most of it is a 30-day job.</div></div>
+  </div>
+  <a class="more" href="https://www.aieconomy.ai/product/geo-audit">Learn more about AI search →</a>
+
+  <section>
+    <h2>See what we saw</h2>
+    <p style="font-size:15px;color:var(--muted);margin:-6px 0 14px;max-width:640px">The actual answers, as screenshotted on the day.</p>
+    <div class="tabs">
+      <input type="radio" name="ev" id="t1" checked><input type="radio" name="ev" id="t2"><input type="radio" name="ev" id="t3">
+      <div class="bar"><label for="t1"><svg width="18" height="18" fill="#10A37F" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>ChatGPT</label><label for="t2"><svg width="18" height="18" fill="#D97757" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg>Claude</label><label for="t3"><svg width="18" height="18" fill="#20808D" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.3977 7.0896h-2.3106V.0676l-7.5094 6.3542V.1577h-1.1554v6.1966L4.4904 0v7.0896H1.6023v10.3976h2.8882V24l6.932-6.3591v6.2005h1.1554v-6.0469l6.9318 6.1807v-6.4879h2.8882V7.0896zm-3.4657-4.531v4.531h-5.355l5.355-4.531zm-13.2862.0676 4.8691 4.4634H5.6458V2.6262zM2.7576 16.332V8.245h7.8476l-6.1149 6.1147v1.9723H2.7576zm2.8882 5.0404v-3.8852h.0001v-2.6488l5.7763-5.7764v7.0111l-5.7764 5.2993zm12.7086.0248-5.7766-5.1509V9.0618l5.7766 5.7766v6.5588zm2.8882-5.0652h-1.733v-1.9723L13.3948 8.245h7.8478v8.087z"/></svg>Perplexity</label></div>
+      <div class="pane p1">
+      <div class="ev bad"><div class="t"><b><svg width="18" height="18" fill="#10A37F" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>ChatGPT</b><span>11 Oct 2026</span></div><img src="img/chatgpt.jpg" alt="ChatGPT answer" loading="lazy"><div class="cap">Pointed to government AI Adopt Centres, then three private consultancies. AI Economy not among them.</div></div>
+      </div>
+      <div class="pane p2">
+      <div class="ev bad"><div class="t"><b><svg width="18" height="18" fill="#D97757" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg>Claude</b><span>11 Oct 2026</span></div><img src="img/claude.jpg" alt="Claude answer" loading="lazy"><div class="cap">Government programs, the National AI Centre directory and “independent strategists” in general. AI Economy not named.</div></div>
+      </div>
+      <div class="pane p3">
+      <div class="ev bad"><div class="t"><b><svg width="18" height="18" fill="#20808D" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.3977 7.0896h-2.3106V.0676l-7.5094 6.3542V.1577h-1.1554v6.1966L4.4904 0v7.0896H1.6023v10.3976h2.8882V24l6.932-6.3591v6.2005h1.1554v-6.0469l6.9318 6.1807v-6.4879h2.8882V7.0896zm-3.4657-4.531v4.531h-5.355l5.355-4.531zm-13.2862.0676 4.8691 4.4634H5.6458V2.6262zM2.7576 16.332V8.245h7.8476l-6.1149 6.1147v1.9723H2.7576zm2.8882 5.0404v-3.8852h.0001v-2.6488l5.7763-5.7764v7.0111l-5.7764 5.2993zm12.7086.0248-5.7766-5.1509V9.0618l5.7766 5.7766v6.5588zm2.8882-5.0652h-1.733v-1.9723L13.3948 8.245h7.8478v8.087z"/></svg>Perplexity</b><span>11 Oct 2026</span></div><img src="img/perplexity.jpg" alt="Perplexity answer" loading="lazy"><div class="cap">A six-row table of providers, led by SMEC AI in Melbourne. AI Economy not among them.</div></div>
+      </div>
+    </div>
+    <a class="more" href="https://www.aieconomy.ai/product/geo-audit">Learn more: how we check, fix and track →</a>
+  </section>
+
+  <section>
+    <h2>What influences AI search visibility</h2>
+    <p style="font-size:15px;color:var(--muted);margin:-6px 0 14px;max-width:640px">AI engines don’t rank pages. They build an answer from what they can find and trust about you. Six things decide whether you’re in it.</p>
+    <div class="look">
+      <div class="i"><span class="n">1</span><b>Answer pages</b><p>Does your site answer the questions customers ask, in plain words an AI can quote?</p></div>
+      <div class="i"><span class="n">2</span><b>Site crawl</b><p>Can the AI engines read your site at all? Speed, structure, blocked pages and broken links.</p></div>
+      <div class="i"><span class="n">3</span><b>Citations</b><p>Who else mentions you? Directories, industry sites, local media and partners the engines trust.</p></div>
+      <div class="i"><span class="n">4</span><b>Consistency</b><p>Is your name, address, services and description identical across your site, Google listing and socials?</p></div>
+      <div class="i"><span class="n">5</span><b>Reviews</b><p>How many, how recent, and what they say. Engines read reviews as evidence.</p></div>
+      <div class="i"><span class="n">6</span><b>Structured data</b><p>The code behind the page that tells an engine what kind of business you are and what you do.</p></div>
+    </div>
+    <div class="stats">
+      <h3>Search is moving. <em>Those who start early will win.</em></h3>
+      <p style="font-size:14.5px;color:var(--hero-muted)">The engines are growing fast, and when an AI answer appears, fewer people click past it.</p>
+      <div class="g">
+        <div class="s"><div class="n">1 billion <small>a week</small></div><p>ChatGPT weekly users, up from 900 million six months earlier.</p></div>
+        <div class="s"><div class="n">2.5 billion <small>a month</small></div><p>People seeing Google AI Overviews above the results.</p></div>
+        <div class="s"><div class="n">15% → 8%</div><p>Clicks on normal Google results when an AI answer is shown.</p></div>
+      </div>
+      <div class="src">Sources: OpenAI (Aug 2026); Google I/O via CNBC (May 2026); Pew Research Center (2025).</div>
+    </div>
+    <a class="more" href="https://www.aieconomy.ai/product/geo-audit">Learn more about what influences visibility →</a>
+  </section>
+
+  <section>
+    <h2>How we help</h2>
+    <div class="svc">
+      <div class="c"><span class="tag">Audit</span><h3>Full search visibility audit</h3><p>Up to 100 real customer questions across the AI engines plus Google, with the gaps ranked and a plan to close them.</p></div>
+      <div class="c w"><span class="tag">Monitor</span><h3>Track, manage and monitor</h3><p>Weekly checks on the questions that matter, so you see the moment an AI engine starts (or stops) naming you.</p></div>
+      <div class="c d"><span class="tag">Done for you</span><h3>We make the fixes</h3><p>Service pages, listings, reviews and structured data, done by our team, measured against the audit every month.</p></div>
+    </div>
+    <div class="hand">
+      <div><h3>Need a hand?</h3><p>Most businesses don’t want to do this themselves. We run the audit, make the fixes and track the movement every month, so you can get on with the work. Talk to us about doing it for you.</p></div>
+      <a class="btn" href="https://calendar.app.google/KMWhVZmsAGEMrna2A">Talk to us</a>
+    </div>
+  </section>
+
+  <section>
+    <h2>AI search, explained</h2>
+    <div class="faq">
+      <details><summary>What is AI search?</summary><p>Instead of typing keywords into Google and clicking through ten blue links, people now ask a question in ChatGPT, Claude, Gemini or Perplexity and get one answer. Google itself now puts an AI answer above the results. If that answer names a business, that business gets the call. If it doesn’t name you, you’re invisible to that customer.</p></details>
+      <details><summary>How does it work?</summary><p>AI engines read the web, your Google Business listing, review sites and directories, then write an answer from what they find. They favour businesses that are described clearly and consistently everywhere, have pages that answer the actual question, and get mentioned by other sites. They don’t favour the biggest ad budget.</p></details>
+      <details><summary>Isn’t this just SEO?</summary><p>It overlaps, but it’s not the same. SEO gets you a position on a results page. AI search gives one answer, and either you’re in it or you’re not. A lot of businesses that rank fine on Google are nowhere in AI answers, because the content that wins a ranking isn’t the content an AI can quote. Already have an SEO agency? Keep them. We handle the AI search side and work alongside them. No agency? We do both, Google and AI, in one plan.</p></details>
+      <details><summary>Why does the answer change each time?</summary><p>AI answers aren’t fixed like a ranking. Ask twice and the names shift. That’s why this page is a snapshot and a full audit measures how often you’re mentioned across many runs and many questions, not just one.</p></details>
+      <details><summary>How do you measure success?</summary><p>At kick-off we agree the ten questions your customers actually ask. Then we track how often each AI engine names you on those questions, run many times over, because answers shift. That share of mentions is the score. We report it monthly against the starting point, alongside your Google rankings, so you can see movement engine by engine rather than taking our word for it.</p></details>
+      <details><summary>What can be done about it?</summary><p>Most of it is practical: a clear description of what you do and where, pages that answer the questions customers ask, consistent listings, reviews, and structured data so the engines can read your site. Movement usually shows first in Google’s AI answers and Perplexity, with ChatGPT the slowest to catch up.</p></details>
+    </div>
+  </section>
+
+  <div class="cta">
+    <h3>Get in touch.</h3>
+    <p>Let's chat about where you land in AI search and what it would take to be in the answer.</p>
+    <p class="who">I've been helping businesses navigate digital change for 25 years. Now it's AI. Be seen in search. Sarah Balmer</p>
+    <a class="btn" href="https://calendar.app.google/KMWhVZmsAGEMrna2A">Schedule a call</a>
+    <p class="alt"><a href="https://www.linkedin.com/in/sarahbalmer/" target="_blank" rel="noopener">Sarah on LinkedIn</a> &nbsp;·&nbsp; <a href="https://aieconomy.ai" target="_blank" rel="noopener">aieconomy.ai</a> &nbsp;·&nbsp; <a href="mailto:sarah@balmeragency.com.au?subject=AI%20search%20check">Send a message</a></p>
+  </div>
+
+  <footer>Prepared by <a href="https://aieconomy.ai">AI Economy</a>.<br>Snapshot taken on the date shown. AI answers change from one run to the next; a full audit measures them over repeated runs.</footer>
+</div>
+</body>
+</html>
