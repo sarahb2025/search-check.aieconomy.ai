@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--indigo:#111111;--indigo2:#1C1C1E;--page:#F5F5F7;--ink:#111111;--muted:#6B6B70;--hero-muted:#C7C7CC;--mint:#2BB8C4;--blue:#0E9AA7;--blue2:#0B7F8A;--good:#1E9E5A;--mid:#D98B00;--bad:#E8663D;--line:#E5E5EA;--card-sh:0 20px 50px -30px rgba(0,0,0,.25)}
+  :root{--indigo:#111111;--indigo2:#1C1C1E;--page:#F5F5F7;--ink:#111111;--muted:#6B6B70;--hero-muted:#C7C7CC;--mint:#FFFFFF;--blue:#111111;--blue2:#111111;--good:#111111;--mid:#6B6B70;--bad:#111111;--line:#E5E5EA;--card-sh:0 20px 50px -30px rgba(0,0,0,.25)}
   *{box-sizing:border-box;margin:0;padding:0}
   html{background:var(--page)}
   body{font-family:Poppins,system-ui,sans-serif;background:var(--page);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
@@ -83,10 +83,10 @@
   .engine{position:relative;overflow:hidden}
   .engine::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--bad)}
   .engine.good::before{background:var(--good)} .engine.mid::before{background:var(--mid)}
-  .engine .verdict{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;padding:7px 12px;border-radius:999px;background:rgba(232,102,61,.1);margin:4px 0 10px}
+  .engine .verdict{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;padding:7px 12px;border-radius:999px;background:rgba(17,17,17,.06);margin:4px 0 10px}
   .engine .verdict::before{content:"✕";font-size:12px}
-  .engine.good .verdict{background:rgba(30,158,90,.1)} .engine.good .verdict::before{content:"✓"}
-  .engine.mid .verdict{background:rgba(217,139,0,.12)} .engine.mid .verdict::before{content:"•"}
+  .engine.good .verdict{background:rgba(17,17,17,.06)} .engine.good .verdict::before{content:"✓"}
+  .engine.mid .verdict{background:rgba(17,17,17,.06)} .engine.mid .verdict::before{content:"•"}
   .engine .note{font-size:13px;color:var(--muted);margin-top:0}
   .engine .note b{display:block;color:var(--ink);font-weight:600;margin-bottom:4px;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
   .chips{display:flex;flex-wrap:wrap;gap:6px}
@@ -95,9 +95,9 @@
   .svc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
   .svc .c{background:#fff;border-radius:18px;box-shadow:var(--card-sh);padding:22px 20px;position:relative;overflow:hidden}
   .svc .c::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--blue)}
-  .svc .c.w::before{background:#111111} .svc .c.d::before{background:#2BB8C4}
+  .svc .c.w::before{background:#111111} .svc .c.d::before{background:#6B6B70}
   .svc .tag{display:inline-block;color:#fff;background:var(--blue);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px;margin-bottom:12px}
-  .svc .c.w .tag{background:#111111} .svc .c.d .tag{background:#2BB8C4}
+  .svc .c.w .tag{background:#111111} .svc .c.d .tag{background:#6B6B70}
   .svc h3{font-size:17px;font-weight:600;margin-bottom:6px}
   .svc p{font-size:14px;color:var(--muted)}
   @media (max-width:600px){.svc{grid-template-columns:1fr}.summary{flex-direction:column;align-items:flex-start}}
