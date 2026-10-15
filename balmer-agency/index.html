@@ -46,11 +46,12 @@
   .ev .cap{font-size:14px;color:var(--ink);margin-top:10px}
   .tabs{background:#fff;border-radius:18px;box-shadow:var(--card-sh);padding:10px 18px 18px}
   .tabs input{position:absolute;opacity:0;pointer-events:none}
-  .tabs .bar{display:flex;gap:6px;border-bottom:1px solid var(--line);margin:0 -18px 16px;padding:0 12px}
-  .tabs label{display:inline-flex;align-items:center;gap:8px;padding:12px 14px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tabs .bar{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+  .tabs label{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;border:1px solid var(--line);border-radius:999px;background:#fff;margin-bottom:0;transition:background .15s}
+  .tabs label:hover{border-color:var(--ink)}
   .tabs label svg{flex:none}
   .tabs .pane{display:none}
-  #t1:checked~.bar label[for=t1],#t2:checked~.bar label[for=t2],#t3:checked~.bar label[for=t3]{color:var(--ink);border-bottom-color:var(--blue)}
+  #t1:checked~.bar label[for=t1],#t2:checked~.bar label[for=t2],#t3:checked~.bar label[for=t3]{background:var(--ink);color:#fff;border-color:var(--ink)}
   #t1:checked~.p1,#t2:checked~.p2,#t3:checked~.p3{display:block}
   .ev{padding:0;box-shadow:none;margin:0}
   .why{background:#fff;border-radius:18px;padding:22px 24px;box-shadow:var(--card-sh);border-left:4px solid var(--blue);font-size:15px}
