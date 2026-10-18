@@ -1,6 +1,6 @@
 #search-check-aieconomy
 
-Shareable AI search check pages, one per prospect, served at `check.gatha.ai/[business-slug]/`.
+Shareable AI search check pages, one per prospect, served at `search-check.aieconomy.ai/[business-slug]/`. Part of AI Economy's Search Visibility campaign (direct to businesses; Gatha is reseller-only and not used here).
 
 ## Add a prospect
 1. Copy `_template/` to `[business-slug]/` (lowercase, hyphens, e.g. `smith-plumbing`).
@@ -20,10 +20,10 @@ Shareable AI search check pages, one per prospect, served at `check.gatha.ai/[bu
 | GAP_1–3, GAP_n_FIX | Why they're missing, and the fix |
 | BOOK_URL | Pre-filled with Sarah's Google Calendar booking page |
 | EMAIL | Sarah's email |
-| FREE_CHECK_URL | Pre-filled with the "See how you show up in Search" page; swap for the live gatha.ai URL when ready |
+| FREE_CHECK_URL | Pre-filled with the "See how you show up in Search" page; swap for the live aieconomy.ai URL when ready |
 
 ## Dev setup (one-off)
-- Repo under the Gatha GitHub org, Vercel connected, auto-deploy on push to `main`.
-- DNS: `check.gatha.ai` CNAME → Vercel (record shown in Vercel → Domains).
+- Repo under the AI Economy GitHub account (sarahb2025), Vercel connected, auto-deploy on push to `main`.
+- DNS: `search-check.aieconomy.ai` CNAME → Vercel (record shown in Vercel → Domains).
 - Enable Vercel Analytics for page views.
 - `vercel.json` sets a 404 for `/_template/` so it's never public.
