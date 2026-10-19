@@ -95,7 +95,7 @@
   .chips{display:flex;flex-wrap:wrap;gap:6px}
   .more-names{font-size:14px;color:var(--muted);margin:-14px 0 18px}
   .chips span{background:var(--page);border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:12.5px;color:var(--ink)}
-  .svc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .svc{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
   .svc .c{background:#fff;border-radius:18px;box-shadow:var(--card-sh);padding:22px 20px;position:relative;overflow:hidden}
   .svc .c::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--blue)}
   .svc .c.w::before{background:#111111} .svc .c.d::before{background:#6B6B70}
@@ -180,6 +180,11 @@
   .ans .full{font-family:inherit;margin-top:10px;background:none;border:0;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer;padding:0;text-decoration:underline}
   .ans .how{font-size:12px;color:var(--muted);margin-top:10px}
   .lead-note{color:var(--hero-muted);font-size:13.5px;margin-top:12px;max-width:620px}
+  .bio{text-align:center;max-width:560px;margin:36px auto 0;padding-top:28px;border-top:1px solid var(--line)}
+  .bio p{font-size:15px;color:var(--ink);margin:0}
+  .bio .sig{font-weight:600;margin:6px 0 12px}
+  .bio a{font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+  .bio a:hover{border-color:var(--ink)}
   .opts{display:none;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:20px}
   .opts.on{display:flex}
   .opts a,.opts button{font-family:inherit;font-size:14px;font-weight:500;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:11px 18px;text-decoration:none;cursor:pointer}
@@ -268,12 +273,13 @@
   <section>
     <h2>How we help</h2>
     <div class="svc">
-      <div class="c"><span class="tag">Audit</span><h3>Full search visibility audit</h3><p>Up to 100 real customer questions across the AI engines plus Google, with the gaps ranked and a plan to close them.</p></div>
-      <div class="c w"><span class="tag">Monitor</span><h3>Track, manage and monitor</h3><p>Weekly checks on the questions that matter, so you see the moment an AI engine starts (or stops) naming you.</p></div>
-      <div class="c d"><span class="tag">Done for you</span><h3>We make the fixes</h3><p>Service pages, listings, reviews and structured data, done by our team, measured against the audit every month.</p></div>
+      <div class="c"><span class="tag">1 · Audit</span><h3>Search visibility audit</h3><p>The real questions your customers ask, run across the AI engines and Google, so you see exactly where you show up and who shows up instead.</p></div>
+      <div class="c w"><span class="tag">2 · Plan</span><h3>Implementation plan</h3><p>The gaps ranked by impact, turned into a clear plan of what to fix first and why.</p></div>
+      <div class="c d"><span class="tag">3 · Fixes</span><h3>We make the fixes</h3><p>Pages, listings, reviews and the behind-the-scenes setup, done by our team.</p></div>
+      <div class="c"><span class="tag">4 · Monitor</span><h3>Ongoing monitoring</h3><p>The same questions re-run regularly, so you see the moment an engine starts, or stops, naming you.</p></div>
     </div>
     <div class="hand">
-      <div><h3>Need a hand?</h3><p>Most businesses don’t want to do this themselves. We run the audit, make the fixes and track the movement every month, so you can get on with the work. Talk to us about doing it for you.</p></div>
+      <div><h3>Need a hand?</h3><p>Most businesses don’t want to do this themselves. We run the audit, build the plan, make the fixes and monitor the movement, so you can get on with the work.</p></div>
     </div>
   </section>
 
@@ -292,7 +298,6 @@
   <div class="cta">
     <h3>Interested in a chat?</h3>
     <p>Let's chat about where you land in AI search and what it would take to be in the answer. Say so below and we'll set up a time to talk before booking anything.</p>
-    <p class="who">I've been helping businesses navigate digital change for 25 years. Now it's AI. Be seen in search. Sarah Balmer</p>
     <button class="btn" id="fixbtn" type="button" style="border:0;cursor:pointer;font-family:inherit">I want to fix this</button>
     <div class="opts" id="opts">
       <a href="mailto:sarah@aieconomy.ai?subject=AI%20search%20check%3A%20{{BUSINESS_URL}}">Email Sarah</a>
@@ -303,6 +308,7 @@
     <p class="thanks" id="thanks">Thanks. Sarah will be in touch shortly.</p>
   </div>
 
+  <div class="bio"><p>I’ve been helping businesses navigate digital change for 25 years. Now it’s AI. Be seen in search.</p><p class="sig">Sarah Balmer</p><a href="https://aieconomy.ai" target="_blank" rel="noopener">See what else we can do for your business at aieconomy.ai →</a></div>
   <footer>Prepared by <a href="https://aieconomy.ai">AI Economy</a>.<br>Each engine was asked three times on the date shown, through its own service. AI answers change from one run to the next; a full audit measures them over many runs.</footer>
 </div>
 <script>
@@ -319,6 +325,7 @@
   var HOOK='{{GHL_WEBHOOK_URL}}';
   var PAGE={slug:'{{SLUG}}',seg:'{{SEG}}',wave:'{{WAVE}}',business:'{{BUSINESS}}',page:location.href.split('?')[0]};
   var known=new URLSearchParams(location.search).get('e');
+  if(known){try{var k='v_'+PAGE.slug;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');send({email:known,action:'page-view'})}}catch(e){send({email:known,action:'page-view'})}}
   function send(x){try{fetch(HOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},PAGE,x||{})),keepalive:true})}catch(e){}}
   document.getElementById('fixbtn').addEventListener('click',function(){document.getElementById('opts').classList.add('on');if(known){send({email:known,action:'fix-this-click'})}});
   document.getElementById('formbtn').addEventListener('click',function(){document.getElementById('lf').classList.add('on')});
