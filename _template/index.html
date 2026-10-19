@@ -151,6 +151,44 @@
   .lead-score p{color:#fff;font-size:15.5px;line-height:1.4}
   .lead-score p b{font-weight:600}
   @media (max-width:600px){.lead-score{flex-direction:column;align-items:flex-start}}
+  .lead-ready{display:flex;align-items:baseline;gap:12px;margin:10px 0 0;padding:14px 22px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:16px;max-width:620px}
+  .lead-ready .lab{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--hero-muted);white-space:nowrap}
+  .lead-ready p{color:#fff;font-size:15px;line-height:1.4}
+  .lead-ready p small{display:block;color:var(--hero-muted);font-size:13.5px;margin-top:2px}
+  @media (max-width:600px){.lead-ready{flex-direction:column;gap:4px}}
+  .ready{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .ready .i{background:#fff;border-radius:14px;box-shadow:var(--card-sh);padding:16px 18px;display:flex;gap:12px;align-items:flex-start}
+  .ready .m{flex:none;display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;font-size:12px;font-weight:700;margin-top:1px}
+  .ready .pass .m{background:rgba(17,17,17,.06);color:var(--ink)} .ready .pass .m::before{content:"✓"}
+  .ready .work .m{background:var(--ink);color:#fff} .ready .work .m::before{content:"!"}
+  .ready b{display:block;font-weight:600;font-size:15px;margin-bottom:2px}
+  .ready p{font-size:13.5px;color:var(--muted)}
+  .ready .work b::after{content:"Needs work";margin-left:8px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  @media (max-width:600px){.ready{grid-template-columns:1fr}}
+  .ans .asks{display:flex;gap:6px;margin:0 0 12px}
+  .ans .asks button{font-family:inherit;font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+  .ans .asks button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .ans .asks .hit{margin-left:auto;font-size:12.5px;color:var(--muted);align-self:center}
+  .ans .run{display:none}
+  .ans .run.on{display:block}
+  .ans .body{position:relative;background:var(--page);border:1px solid var(--line);border-radius:12px;padding:16px 18px;font-size:14.5px;line-height:1.6;max-height:360px;overflow:hidden}
+  .ans .body.open{max-height:none}
+  .ans .body:not(.open)::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(rgba(245,245,247,0),var(--page))}
+  .ans .body p{margin:0 0 10px} .ans .body ul,.ans .body ol{margin:0 0 10px 20px}
+  .ans .body li{margin:0 0 4px}
+  .ans .body mark{background:#111111;color:#fff;padding:0 4px;border-radius:4px}
+  .ans .full{font-family:inherit;margin-top:10px;background:none;border:0;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer;padding:0;text-decoration:underline}
+  .ans .how{font-size:12px;color:var(--muted);margin-top:10px}
+  .lead-note{color:var(--hero-muted);font-size:13.5px;margin-top:12px;max-width:620px}
+  .opts{display:none;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .opts.on{display:flex}
+  .opts a,.opts button{font-family:inherit;font-size:14px;font-weight:500;color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);border-radius:12px;padding:11px 18px;text-decoration:none;cursor:pointer}
+  .opts a:hover,.opts button:hover{background:rgba(255,255,255,.14)}
+  .lf{display:none;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .lf.on{display:flex}
+  .lf input{font-family:inherit;font-size:14px;padding:12px 14px;border-radius:12px;border:0;min-width:220px}
+  .lf button{font-family:inherit;border:0;cursor:pointer}
+  .thanks{display:none;margin-top:18px;color:var(--hero-muted);font-size:15px}
 </style>
 </head>
 <body>
@@ -162,8 +200,11 @@
     </header>
     <div class="pill">AI search check · {{DATE}}</div>
     <h1>“{{PROMPT_1}}”</h1>
-    <p class="lead">One question your customers ask, put to three AI engines.</p>
-    <div class="lead-score"><div class="num">{{MENTIONS}}<small> / 3</small></div><p>search engines named {{BUSINESS}}.</p></div>
+    <p class="lead">One question your customers ask, put to three AI engines, three times each.</p>
+    <div class="lead-score"><div class="num">{{MENTIONS}}<small> / 9</small></div><p>answers named {{BUSINESS}}.</p></div>
+    {{SEARCH_LINE}}
+    <div class="lead-ready"><div class="lab">AI site readiness</div><p>{{READINESS_HEADLINE}}<small>{{READINESS_LINE}}</small></p></div>
+    <p class="lead-note">A snapshot from {{DATE}}. AI answers shift from day to day, which is why we asked three times.</p>
   </div>
 </div>
 
@@ -171,32 +212,34 @@
   <div class="score">
     <div class="engine {{CHATGPT_CLASS}}"><div class="name"><svg width="18" height="18" fill="#10A37F" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg><span>ChatGPT</span></div><div class="verdict">{{CHATGPT_VERDICT}}</div><div class="note">{{CHATGPT_NOTE}}</div></div>
     <div class="engine {{CLAUDE_CLASS}}"><div class="name"><svg width="18" height="18" fill="#D97757" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg><span>Claude</span></div><div class="verdict">{{CLAUDE_VERDICT}}</div><div class="note">{{CLAUDE_NOTE}}</div></div>
-    <div class="engine {{GOOGLE_CLASS}}"><div class="name"><svg width="18" height="18" fill="#20808D" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.3977 7.0896h-2.3106V.0676l-7.5094 6.3542V.1577h-1.1554v6.1966L4.4904 0v7.0896H1.6023v10.3976h2.8882V24l6.932-6.3591v6.2005h1.1554v-6.0469l6.9318 6.1807v-6.4879h2.8882V7.0896zm-3.4657-4.531v4.531h-5.355l5.355-4.531zm-13.2862.0676 4.8691 4.4634H5.6458V2.6262zM2.7576 16.332V8.245h7.8476l-6.1149 6.1147v1.9723H2.7576zm2.8882 5.0404v-3.8852h.0001v-2.6488l5.7763-5.7764v7.0111l-5.7764 5.2993zm12.7086.0248-5.7766-5.1509V9.0618l5.7766 5.7766v6.5588zm2.8882-5.0652h-1.733v-1.9723L13.3948 8.245h7.8478v8.087z"/></svg><span>Perplexity</span></div><div class="verdict">{{GOOGLE_VERDICT}}</div><div class="note">{{GOOGLE_NOTE}}</div></div>
+    <div class="engine {{GOOGLE_CLASS}}"><div class="name"><svg width="18" height="18" fill="#4285F4" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg><span>Google AI</span></div><div class="verdict">{{GOOGLE_VERDICT}}</div><div class="note">{{GOOGLE_NOTE}}</div></div>
   </div>
   <p class="more-names">Top 5 names per engine shown. Say you're interested and we'll walk you through the full list.</p>
-  <div class="findings">
-    <div class="row"><div class="lab">What it means</div><div class="val">{{MEANS_LINE}}</div></div>
-    <div class="row"><div class="lab">What to do</div><div class="val">{{TODO_LINE}}</div></div>
-  </div>
-  <a class="more" href="https://www.aieconomy.ai/product/geo-audit">Learn more about AI search →</a>
 
   <section>
-    <h2>See what we saw</h2>
-    <p style="font-size:15px;color:var(--muted);margin:-6px 0 14px;max-width:640px">The actual answers, as screenshotted on the day.</p>
+    <h2>We asked three times. Here’s what we saw.</h2>
+    <p style="font-size:15px;color:var(--muted);margin:-6px 0 14px;max-width:640px">The same question, three times on each engine, on the same day. Switch between the three asks.</p>
     <div class="tabs">
       <input type="radio" name="ev" id="t1" checked><input type="radio" name="ev" id="t2"><input type="radio" name="ev" id="t3">
-      <div class="bar"><label for="t1"><svg width="18" height="18" fill="#10A37F" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>ChatGPT</label><label for="t2"><svg width="18" height="18" fill="#D97757" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg>Claude</label><label for="t3"><svg width="18" height="18" fill="#20808D" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.3977 7.0896h-2.3106V.0676l-7.5094 6.3542V.1577h-1.1554v6.1966L4.4904 0v7.0896H1.6023v10.3976h2.8882V24l6.932-6.3591v6.2005h1.1554v-6.0469l6.9318 6.1807v-6.4879h2.8882V7.0896zm-3.4657-4.531v4.531h-5.355l5.355-4.531zm-13.2862.0676 4.8691 4.4634H5.6458V2.6262zM2.7576 16.332V8.245h7.8476l-6.1149 6.1147v1.9723H2.7576zm2.8882 5.0404v-3.8852h.0001v-2.6488l5.7763-5.7764v7.0111l-5.7764 5.2993zm12.7086.0248-5.7766-5.1509V9.0618l5.7766 5.7766v6.5588zm2.8882-5.0652h-1.733v-1.9723L13.3948 8.245h7.8478v8.087z"/></svg>Perplexity</label></div>
+      <div class="bar"><label for="t1"><svg width="18" height="18" fill="#10A37F" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>ChatGPT</label><label for="t2"><svg width="18" height="18" fill="#D97757" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg>Claude</label><label for="t3"><svg width="18" height="18" fill="#4285F4" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>Google AI</label></div>
       <div class="pane p1">
-      <div class="ev {{CHATGPT_CLASS}}"><div class="t"><b><svg width="18" height="18" fill="#10A37F" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>ChatGPT</b><span>{{DATE}}</span></div><img src="img/chatgpt.jpg" alt="ChatGPT answer" loading="lazy"><div class="cap">{{P1_CHATGPT}}</div></div>
+      <div class="ev {{CHATGPT_CLASS}}"><div class="t"><b><svg width="18" height="18" fill="#10A37F" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.407-.667zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>ChatGPT</b><span>{{DATE}}</span></div>{{CARD_CHATGPT}}<div class="cap">{{P1_CHATGPT}}</div></div>
       </div>
       <div class="pane p2">
-      <div class="ev {{CLAUDE_CLASS}}"><div class="t"><b><svg width="18" height="18" fill="#D97757" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg>Claude</b><span>{{DATE}}</span></div><img src="img/claude.jpg" alt="Claude answer" loading="lazy"><div class="cap">{{P1_CLAUDE}}</div></div>
+      <div class="ev {{CLAUDE_CLASS}}"><div class="t"><b><svg width="18" height="18" fill="#D97757" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></svg>Claude</b><span>{{DATE}}</span></div>{{CARD_CLAUDE}}<div class="cap">{{P1_CLAUDE}}</div></div>
       </div>
       <div class="pane p3">
-      <div class="ev {{GOOGLE_CLASS}}"><div class="t"><b><svg width="18" height="18" fill="#20808D" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.3977 7.0896h-2.3106V.0676l-7.5094 6.3542V.1577h-1.1554v6.1966L4.4904 0v7.0896H1.6023v10.3976h2.8882V24l6.932-6.3591v6.2005h1.1554v-6.0469l6.9318 6.1807v-6.4879h2.8882V7.0896zm-3.4657-4.531v4.531h-5.355l5.355-4.531zm-13.2862.0676 4.8691 4.4634H5.6458V2.6262zM2.7576 16.332V8.245h7.8476l-6.1149 6.1147v1.9723H2.7576zm2.8882 5.0404v-3.8852h.0001v-2.6488l5.7763-5.7764v7.0111l-5.7764 5.2993zm12.7086.0248-5.7766-5.1509V9.0618l5.7766 5.7766v6.5588zm2.8882-5.0652h-1.733v-1.9723L13.3948 8.245h7.8478v8.087z"/></svg>Perplexity</b><span>{{DATE}}</span></div><img src="img/perplexity.jpg" alt="Perplexity answer" loading="lazy"><div class="cap">{{P1_GOOGLE}}</div></div>
+      <div class="ev {{GOOGLE_CLASS}}"><div class="t"><b><svg width="18" height="18" fill="#4285F4" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>Google AI</b><span>{{DATE}}</span></div>{{CARD_GOOGLE}}<div class="cap">{{P1_GOOGLE}}</div></div>
       </div>
     </div>
-    <a class="more" href="https://www.aieconomy.ai/product/geo-audit">Learn more: how we check, fix and track →</a>
+  </section>
+
+  <section>
+    <h2>AI site readiness</h2>
+    <p style="font-size:15px;color:var(--muted);margin:-6px 0 14px;max-width:640px">We looked at how easily AI engines can find, read and understand {{WEBSITE}}: access, structure, content and more. Here’s what stood out.</p>
+    <div class="ready">
+{{READY_ITEMS}}
+    </div>
   </section>
 
   <section>
@@ -220,7 +263,6 @@
       </div>
       <div class="src">Sources: OpenAI (Aug 2026); Google I/O via CNBC (May 2026); Pew Research Center (2025).</div>
     </div>
-    <a class="more" href="https://www.aieconomy.ai/product/geo-audit">Learn more about what influences visibility →</a>
   </section>
 
   <section>
@@ -232,7 +274,6 @@
     </div>
     <div class="hand">
       <div><h3>Need a hand?</h3><p>Most businesses don’t want to do this themselves. We run the audit, make the fixes and track the movement every month, so you can get on with the work. Talk to us about doing it for you.</p></div>
-      <a class="btn" href="mailto:sarah@aieconomy.ai?subject=AI%20search%20check%3A%20interested%20in%20a%20chat">Talk to us</a>
     </div>
   </section>
 
@@ -244,7 +285,7 @@
       <details><summary>Isn’t this just SEO?</summary><p>It overlaps, but it’s not the same. SEO gets you a position on a results page. AI search gives one answer, and either you’re in it or you’re not. A lot of businesses that rank fine on Google are nowhere in AI answers, because the content that wins a ranking isn’t the content an AI can quote. Already have an SEO agency? Keep them. We handle the AI search side and work alongside them. No agency? We do both, Google and AI, in one plan.</p></details>
       <details><summary>Why does the answer change each time?</summary><p>AI answers aren’t fixed like a ranking. Ask twice and the names shift. That’s why this page is a snapshot and a full audit measures how often you’re mentioned across many runs and many questions, not just one.</p></details>
       <details><summary>How do you measure success?</summary><p>At kick-off we agree the ten questions your customers actually ask. Then we track how often each AI engine names you on those questions, run many times over, because answers shift. That share of mentions is the score. We report it monthly against the starting point, alongside your Google rankings, so you can see movement engine by engine rather than taking our word for it.</p></details>
-      <details><summary>What can be done about it?</summary><p>Most of it is practical: a clear description of what you do and where, pages that answer the questions customers ask, consistent listings, reviews, and structured data so the engines can read your site.</p></details>
+      <details><summary>What can I do to fix this?</summary><p>Most of it is practical work on your own website and listings: a clear description of what you do and where, pages that answer the questions your customers actually ask, consistent details everywhere you appear, reviews, and the behind-the-scenes setup that lets AI engines read your site properly. Some of it you can do yourself. If you would rather it was done for you, that is what we do: we fix it, then re-run the same questions so you can see the change.</p></details>
     </div>
   </section>
 
@@ -252,12 +293,37 @@
     <h3>Interested in a chat?</h3>
     <p>Let's chat about where you land in AI search and what it would take to be in the answer. Say so below and we'll set up a time to talk before booking anything.</p>
     <p class="who">I've been helping businesses navigate digital change for 25 years. Now it's AI. Be seen in search. Sarah Balmer</p>
-    <a class="btn" href="mailto:sarah@aieconomy.ai?subject=AI%20search%20check%3A%20interested%20in%20a%20chat">Get in touch</a>
-    <p class="alt">Already know you want a call? <a href="https://calendar.app.google/KMWhVZmsAGEMrna2A" target="_blank" rel="noopener">Book one here</a>.</p>
-    <p class="alt"><a href="{{LINKEDIN_URL}}" target="_blank" rel="noopener">Sarah on LinkedIn</a> &nbsp;·&nbsp; <a href="https://aieconomy.ai" target="_blank" rel="noopener">aieconomy.ai</a> &nbsp;·&nbsp; <a href="mailto:sarah@aieconomy.ai?subject=AI%20search%20check">Send a message</a></p>
+    <button class="btn" id="fixbtn" type="button" style="border:0;cursor:pointer;font-family:inherit">I want to fix this</button>
+    <div class="opts" id="opts">
+      <a href="mailto:sarah@aieconomy.ai?subject=AI%20search%20check%3A%20{{BUSINESS_URL}}">Email Sarah</a>
+      <a href="https://calendar.app.google/KMWhVZmsAGEMrna2A" target="_blank" rel="noopener">Book a call</a>
+      <button type="button" id="formbtn">Leave my details</button>
+    </div>
+    <form class="lf" id="lf"><input name="name" placeholder="Your name" required><input name="email" type="email" placeholder="Work email" required><button class="btn" type="submit">Send</button></form>
+    <p class="thanks" id="thanks">Thanks. Sarah will be in touch shortly.</p>
   </div>
 
-  <footer>Prepared by <a href="https://aieconomy.ai">AI Economy</a>.<br>Snapshot taken on the date shown. AI answers change from one run to the next; a full audit measures them over repeated runs.</footer>
+  <footer>Prepared by <a href="https://aieconomy.ai">AI Economy</a>.<br>Each engine was asked three times on the date shown, through its own service. AI answers change from one run to the next; a full audit measures them over many runs.</footer>
 </div>
+<script>
+(function(){
+  document.querySelectorAll('.ans').forEach(function(a){
+    var btns=a.querySelectorAll('.asks button[data-r]'),runs=a.querySelectorAll('.run');
+    btns.forEach(function(b){b.addEventListener('click',function(){
+      btns.forEach(function(x){x.setAttribute('aria-pressed','false')});runs.forEach(function(x){x.classList.remove('on')});
+      b.setAttribute('aria-pressed','true');a.querySelector('.run[data-r="'+b.dataset.r+'"]').classList.add('on');})});
+    a.querySelectorAll('.full').forEach(function(f){f.addEventListener('click',function(){var bd=f.previousElementSibling;bd.classList.toggle('open');f.textContent=bd.classList.contains('open')?'Show less':'Show full answer';})});
+  });
+})();
+(function(){
+  var HOOK='{{GHL_WEBHOOK_URL}}';
+  var PAGE={slug:'{{SLUG}}',seg:'{{SEG}}',wave:'{{WAVE}}',business:'{{BUSINESS}}',page:location.href.split('?')[0]};
+  var known=new URLSearchParams(location.search).get('e');
+  function send(x){try{fetch(HOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},PAGE,x||{})),keepalive:true})}catch(e){}}
+  document.getElementById('fixbtn').addEventListener('click',function(){document.getElementById('opts').classList.add('on');if(known){send({email:known,action:'fix-this-click'})}});
+  document.getElementById('formbtn').addEventListener('click',function(){document.getElementById('lf').classList.add('on')});
+  document.getElementById('lf').addEventListener('submit',function(e){e.preventDefault();var f=new FormData(e.target);send({name:f.get('name'),email:f.get('email'),action:'fix-this-form'});e.target.classList.remove('on');document.getElementById('thanks').style.display='block'});
+})();
+</script>
 </body>
 </html>
