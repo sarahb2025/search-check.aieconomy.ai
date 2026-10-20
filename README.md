@@ -1,29 +1,25 @@
-#search-check-aieconomy
+# AI Search Check pages kit
 
-Shareable AI search check pages, one per prospect, served at `search-check.aieconomy.ai/[business-slug]/`. Part of AI Economy's Search Visibility campaign (direct to businesses; Gatha is reseller-only and not used here).
+Six files that let Claude Code build, test and publish the AI Search Check pages at https://check.aieconomy.ai/<slug>/.
 
-## Add a prospect
-1. Copy `_template/` to `[business-slug]/` (lowercase, hyphens, e.g. `smith-plumbing`).
-2. Fill the `{{PLACEHOLDERS}}` in `index.html`.
-3. Push to `main` — Vercel deploys automatically.
-4. Add the row to the tracking sheet.
+| File | Belongs at | What it is |
+| --- | --- | --- |
+| CLAUDE.md | repo root | Rules every Claude Code session follows |
+| README.md | checks-kit/ (this file) | How the kit fits together |
+| pages.csv | repo root | One row per page: slug, business, seg, wave, sheet row, artifact link |
+| build_pages.py | scripts/ | Builds site/<slug>/index.html from audits/<slug>.html + the CTA block, and refuses pages that break the rules |
+| cta_block.html | scripts/ | The call-to-action box and GHL tracking used on every page |
+| test_pages.py | tests/ | Offline browser test of every built page; the webhook is stubbed, nothing reaches GHL |
 
-## Placeholders
-| Placeholder | What goes in |
-| --- | --- |
-| BUSINESS, DATE | Business name, date the check ran |
-| CHATGPT/CLAUDE/GOOGLE_VERDICT | Short verdict: "Not mentioned", "Mentioned, competitor first", "Recommended" |
-| ..._CLASS | `bad`, `mid` or `good` (colours the card) |
-| ..._NOTE | One line of detail |
-| PROMPT_1, PROMPT_2 | The two customer questions asked |
-| P1_/P2_ engine rows | What each engine answered, one line |
-| GAP_1–3, GAP_n_FIX | Why they're missing, and the fix |
-| BOOK_URL | Pre-filled with Sarah's Google Calendar booking page |
-| EMAIL | Sarah's email |
-| FREE_CHECK_URL | Pre-filled with the "See how you show up in Search" page; swap for the live aieconomy.ai URL when ready |
+## First session: fit the kit into this repo
 
-## Dev setup (one-off)
-- Repo under the AI Economy GitHub account (sarahb2025), Vercel connected, auto-deploy on push to `main`.
-- DNS: `search-check.aieconomy.ai` CNAME → Vercel (record shown in Vercel → Domains).
-- Enable Vercel Analytics for page views.
-- `vercel.json` sets a 404 for `/_template/` so it's never public.
+The files are uploaded flat into `checks-kit/`. In the first Claude Code session:
+
+1. Look at how this repo currently serves https://check.aieconomy.ai/parently/ (folder, file name, any vercel.json). Do not change how existing pages are served.
+2. Move the kit files to the places above, and change `build_pages.py` and `test_pages.py` so they write and read built pages in the folder Vercel already serves (instead of `site/` if that's different).
+3. Save the current live Parently page as `audits/parently.html`, build it, run the test (it must PASS), and open a pull request that lists exactly what changed.
+
+## After that
+
+- New or updated audit: save it as `audits/<slug>.html`, check its row in pages.csv, then build, test and open a PR.
+- Setup script for the cloud environment: `pip install playwright && python -m playwright install --with-deps chromium`
