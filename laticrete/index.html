@@ -294,43 +294,62 @@
     </div>
   </section>
 
-  <div class="cta">
-    <h3>Interested in a chat?</h3>
-    <p>Let's chat about where you land in AI search and what it would take to be in the answer. Say so below and we'll set up a time to talk before booking anything.</p>
-    <button class="btn" id="fixbtn" type="button" style="border:0;cursor:pointer;font-family:inherit">I want to fix this</button>
-    <div class="opts" id="opts">
-      <a href="mailto:sarah@aieconomy.ai?subject=AI%20search%20check%3A%20Laticrete">Email Sarah</a>
-      <a href="https://calendar.app.google/KMWhVZmsAGEMrna2A" target="_blank" rel="noopener">Book a call</a>
-      <button type="button" id="formbtn">Leave my details</button>
-    </div>
-    <form class="lf" id="lf"><input name="name" placeholder="Your name" required><input name="email" type="email" placeholder="Work email" required><button class="btn" type="submit">Send</button></form>
-    <p class="thanks" id="thanks">Thanks. Sarah will be in touch shortly.</p>
+  <!--
+AI Search Check page: call-to-action + GHL tracking block
+Replace the existing <div class="cta">...</div> and the second script tag (the one with HOOK) on each page with this block.
+Per page, edit only the PAGE line: slug, seg, wave, business.
+Email links should open the page as  https://check.aieconomy.ai/<slug>/?e=<their email>&n=<their first name>
+so page views and "I want to fix this" clicks are tied to the right contact and the alert shows their name.
+-->
+<style>
+  .cta .lf{display:none;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .cta .lf.on{display:flex}
+  .cta .lf input,.cta .lf textarea{flex:1 1 200px;padding:10px 12px;border:1px solid #ccd;border-radius:8px;font:inherit}
+  .cta .lf textarea{flex-basis:100%;min-height:60px}
+  .cta .thanks{display:none}
+</style>
+<div class="cta">
+  <h3>Interested in a chat?</h3>
+  <p>Let's chat about where you land in AI search and what it would take to be in the answer. Say so below and we'll set up a time to talk before booking anything.</p>
+  <button class="btn" id="fixbtn" type="button" style="border:0;cursor:pointer;font-family:inherit">I want to fix this</button>
+  <div class="opts" id="opts">
+    <button type="button" id="callbtn">Request a call</button>
+    <button type="button" id="formbtn">Leave my details</button>
+    <a id="maillink" href="mailto:sarah@aieconomy.ai">Email Sarah</a>
   </div>
-
-  <div class="bio"><p>I’ve been helping businesses navigate digital change for 25 years. Now it’s AI. Be seen in search.</p><p class="sig">Sarah Balmer</p><a href="https://aieconomy.ai" target="_blank" rel="noopener">See what else we can do for your business at aieconomy.ai →</a></div>
-  <footer>Prepared by <a href="https://aieconomy.ai">AI Economy</a>.<br>Each engine was asked three times on the date shown, through its own service. AI answers change from one run to the next; a full audit measures them over many runs.</footer>
+  <form class="lf" id="cf">
+    <input name="name" placeholder="Your name" required>
+    <input name="email" type="email" placeholder="Work email" required>
+    <textarea name="times" placeholder="Best days and times for a call (e.g. Tue or Wed morning)" required></textarea>
+    <button class="btn" type="submit">Request a call</button>
+  </form>
+  <form class="lf" id="lf">
+    <input name="name" placeholder="Your name" required>
+    <input name="email" type="email" placeholder="Work email" required>
+    <button class="btn" type="submit">Send</button>
+  </form>
+  <p class="thanks" id="thanks">Thanks. Sarah will be in touch shortly.</p>
 </div>
 <script>
 (function(){
-  document.querySelectorAll('.ans').forEach(function(a){
-    var btns=a.querySelectorAll('.asks button[data-r]'),runs=a.querySelectorAll('.run');
-    btns.forEach(function(b){b.addEventListener('click',function(){
-      btns.forEach(function(x){x.setAttribute('aria-pressed','false')});runs.forEach(function(x){x.classList.remove('on')});
-      b.setAttribute('aria-pressed','true');a.querySelector('.run[data-r="'+b.dataset.r+'"]').classList.add('on');})});
-    a.querySelectorAll('.full').forEach(function(f){f.addEventListener('click',function(){var bd=f.previousElementSibling;bd.classList.toggle('open');f.textContent=bd.classList.contains('open')?'Show less':'Show full answer';})});
-  });
-})();
-(function(){
   var HOOK='https://services.leadconnectorhq.com/hooks/0G1q3az6pgxch6abG2iE/webhook-trigger/2c30da22-00b4-4f6f-82ce-c088a7e6da77';
-  var PAGE={slug:'laticrete',seg:'warm',wave:'1',business:'Laticrete',page:location.href.split('?')[0]};
-  var known=new URLSearchParams(location.search).get('e');
-  if(known){try{var k='v_'+PAGE.slug;if(!sessionStorage.getItem(k)){sessionStorage.setItem(k,'1');send({email:known,action:'page-view'})}}catch(e){send({email:known,action:'page-view'})}}
-  function send(x){if(!HOOK)return;try{fetch(HOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},PAGE,x||{})),keepalive:true})}catch(e){}}
+  var PAGE={slug:'laticrete',seg:'warm',wave:'1',business:'Laticrete',page:location.origin+location.pathname};
+  var q=new URLSearchParams(location.search);
+  var known=q.get('e')||'', knownName=q.get('n')||'';
+  if(knownName){PAGE.name=knownName}
+  document.getElementById('maillink').href='mailto:sarah@aieconomy.ai?subject='+encodeURIComponent('AI search check: '+PAGE.business);
+  function send(x){try{fetch(HOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({},PAGE,x||{})),keepalive:true})}catch(e){}}
+  function prefill(f){if(known&&f.email){f.email.value=known}if(knownName&&f.name){f.name.value=knownName}}
+  function done(f){f.classList.remove('on');document.getElementById('opts').classList.remove('on');document.getElementById('thanks').style.display='block'}
+  if(known){var k='v_'+PAGE.slug,seen=false;try{seen=!!sessionStorage.getItem(k);sessionStorage.setItem(k,'1')}catch(e){}if(!seen){send({email:known,action:'page-view'})}}
   document.getElementById('fixbtn').addEventListener('click',function(){document.getElementById('opts').classList.add('on');if(known){send({email:known,action:'fix-this-click'})}});
-  document.getElementById('formbtn').addEventListener('click',function(){document.getElementById('lf').classList.add('on')});
-  document.getElementById('lf').addEventListener('submit',function(e){e.preventDefault();var f=new FormData(e.target);send({name:f.get('name'),email:f.get('email'),action:'fix-this-form'});e.target.classList.remove('on');document.getElementById('thanks').style.display='block'});
+  document.getElementById('callbtn').addEventListener('click',function(){var f=document.getElementById('cf');document.getElementById('lf').classList.remove('on');prefill(f);f.classList.add('on')});
+  document.getElementById('formbtn').addEventListener('click',function(){var f=document.getElementById('lf');document.getElementById('cf').classList.remove('on');prefill(f);f.classList.add('on')});
+  document.getElementById('cf').addEventListener('submit',function(e){e.preventDefault();var d=new FormData(e.target);send({name:d.get('name'),email:d.get('email'),times:d.get('times'),action:'call-request'});done(e.target)});
+  document.getElementById('lf').addEventListener('submit',function(e){e.preventDefault();var d=new FormData(e.target);send({name:d.get('name'),email:d.get('email'),action:'fix-this-form'});done(e.target)});
 })();
 </script>
-
-
+<div class="bio"><p>I’ve been helping businesses navigate digital change for 25 years. Now it’s AI. Be seen in search.</p><p class="sig">Sarah Balmer</p><a href="https://aieconomy.ai" target="_blank" rel="noopener">See what else we can do for your business at aieconomy.ai →</a></div>
+  <footer>Prepared by <a href="https://aieconomy.ai">AI Economy</a>.<br>Each engine was asked three times on the date shown, through its own service. AI answers change from one run to the next; a full audit measures them over many runs.</footer>
+</div>
 </body></html>
