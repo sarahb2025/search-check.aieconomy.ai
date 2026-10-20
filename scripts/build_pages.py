@@ -34,8 +34,8 @@ def strip_old(html):
     if start == -1:
         raise ValueError('no <div class="cta"> found')
     end = html.find('<div class="bio">', start)
-    if end == -1:
-        raise ValueError('no <div class="bio"> after the CTA box')
+    if end == -1:  # older template: the CTA box has no bio after it, so end at its closing tag
+        end = html.find("</div>", start) + len("</div>")
     html = html[:start] + "<!--CTA-->" + html[end:]
     # drop any script that posts to a webhook (the old tracking code)
     html = re.sub(r"<script>(?:(?!</script>).)*?(?:HOOK|leadconnectorhq)(?:(?!</script>).)*?</script>\s*", "", html, flags=re.S)
