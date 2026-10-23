@@ -66,8 +66,8 @@ Say "Google's AI answers" for Google AI. Use the short name. Base every claim on
 """
     if need_readiness:
         prompt += f"""
-Readiness: turn this note from our earlier site check into 4 to 7 cards, one per finding. Use only facts
-the note states; do not invent. Passes first. Note: "{readiness_note}"
+Readiness: turn this note from our earlier site check into up to 7 cards, one per finding. Use only facts
+the note states; do not invent. Each card must be a concrete, specific check (crawler access, sitemap, schema, meta description, llms.txt, FAQ, image alt text, word count and so on); never a card about an overall score or general impression, and no two cards about the same thing. Fewer cards is fine. Passes first. Note: "{readiness_note}"
 Example card: {{"status": "work", "title": "No llms.txt file", "text": "There's no short guide file telling AI engines which pages matter most."}}
 """
     return gpt(prompt)
@@ -152,8 +152,8 @@ def mark(h, mentions):
 
 # ---------- page ----------
 
-def readiness_items(slug):
-    src = ROOT / "audits" / f"{slug}.html"
+def readiness_items(slug, src=None):
+    src = pathlib.Path(src) if src else ROOT / "audits" / f"{slug}.html"
     if not src.exists():
         return []
     return re.findall(r'<div class="i (?:pass|work)">.*?</p></div></div>', src.read_text(), re.S)
@@ -171,10 +171,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("answers")
     ap.add_argument("--readiness", default="", help="sheet readiness note, used when the audit has no readiness cards")
+    ap.add_argument("--old", help="page to take readiness cards from (default: the current audits/<slug>.html)")
     args = ap.parse_args()
     a = json.load(open(args.answers))
     slug = a["slug"]
-    items = readiness_items(slug)
+    items = readiness_items(slug, args.old)
     need = not items
     if need and not args.readiness:
         sys.exit(f"{slug}: no readiness cards in the current audit; pass --readiness")
