@@ -23,3 +23,7 @@ The files are uploaded flat into `checks-kit/`. In the first Claude Code session
 
 - New or updated audit: save it as `audits/<slug>.html`, check its row in pages.csv, then build, test and open a PR.
 - Setup script for the cloud environment: `pip install playwright` (cloud sessions already have Chromium; the test falls back to it).
+
+## Asking the engines
+
+`scripts/ask_engines.py` puts one question to ChatGPT, Claude and Google AI, three times each (score out of 9), and saves the answers as JSON and Markdown for the page. Google AI comes from Google AI Mode through DataForSEO, falling back to the AI Overview on the normal results when AI Mode gives no answer. It needs `OPENAI_API_KEY`, `DATAFORSEO_LOGIN` and `DATAFORSEO_PASSWORD`; Claude uses `ANTHROPIC_API_KEY` if set, otherwise the `claude` command line. Run `python3 scripts/ask_engines.py --help` for the options.
