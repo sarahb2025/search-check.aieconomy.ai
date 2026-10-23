@@ -176,6 +176,7 @@
   .ans .full{font-family:inherit;margin-top:10px;background:none;border:0;font-size:13.5px;font-weight:600;color:var(--ink);cursor:pointer;padding:0;text-decoration:underline}
   .ans .how{font-size:12px;color:var(--muted);margin-top:10px}
   .lead-note{color:var(--hero-muted);font-size:13.5px;margin-top:12px;max-width:620px}
+  .bio:empty{display:none}
   .bio{text-align:center;max-width:560px;margin:36px auto 0;padding-top:28px;border-top:1px solid var(--line)}
   .bio p{font-size:15px;color:var(--ink);margin:0}
   .bio .sig{font-weight:600;margin:6px 0 12px}
@@ -273,7 +274,18 @@
 </div>
 
 </section>
-<section style="margin-top:36px">
+
+<div class="cta">
+<h3>I want to be found in AI search</h3>
+<p>Let's chat about where you land in AI search and what it would take to be in the answer. We'll set up a time to talk before booking anything.</p><div style="text-align:center;margin:16px 0 0"><a class="pv-btn" href="#" style="display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:220px;height:46px;padding:0 24px;font-size:15px;font-weight:600;line-height:1;border-radius:999px;text-decoration:none;font-family:Poppins,sans-serif;background:#fff;color:#111">Get in touch</a></div>
+
+
+
+
+<p class="thanks" id="thanks">Thanks. Sarah will be in touch shortly.</p>
+</div>
+<div class="bio"></div>
+<section style="margin-top:56px">
 <h2>AI search, explained</h2>
 <div class="faq">
 <details><summary>What is AI search?</summary><p>Instead of typing keywords into Google and clicking through ten blue links, people now ask a question in ChatGPT, Claude, Gemini or Perplexity and get one answer. Google itself now puts an AI answer above the results. If that answer names a business, that business gets the call. If it doesn’t name you, you’re invisible to that customer.</p></details>
@@ -284,16 +296,7 @@
 <details><summary>What can I do to fix this?</summary><p>Most of it is practical work on your own website and listings: a clear description of what you do and where, pages that answer the questions your customers actually ask, consistent details everywhere you appear, reviews, and the behind-the-scenes setup that lets AI engines read your site properly. Some of it you can do yourself.</p></details>
 <details><summary>How can we help support you?</summary><p>If you would rather it was done for you, that is what we do. We fix it, then re-run the same questions so you can see the change.</p></details>
 </div>
-</section>
-<div class="cta">
-<h3>I want to be found in AI search</h3>
-<p>Let's chat about where you land in AI search and what it would take to be in the answer. We'll set up a time to talk before booking anything.</p><div style="text-align:center;margin:16px 0 0"><a class="pv-btn" href="#" style="display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:220px;height:46px;padding:0 24px;font-size:15px;font-weight:600;line-height:1;border-radius:999px;text-decoration:none;font-family:Poppins,sans-serif;background:#fff;color:#111">Get in touch</a></div>
-
-
-
-
-<p class="thanks" id="thanks">Thanks. Sarah will be in touch shortly.</p>
-</div>
+</section><div style="text-align:center;margin:32px 0 8px"><a class="pv-btn" href="#" onclick="event.preventDefault();var f=document.getElementById('fixbtn'),c=document.getElementById('callbtn');if(f){f.click()}if(c){c.click()}var x=document.querySelector('.cta');if(x){x.scrollIntoView({behavior:'smooth',block:'center'})}" style="display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:220px;height:46px;padding:0 24px;font-size:15px;font-weight:600;line-height:1;border-radius:999px;text-decoration:none;font-family:Poppins,sans-serif;background:#111;color:#fff">Request a call</a></div>
 <!--
 AI Search Check page: call-to-action + GHL tracking block
 Replace the existing <div class="cta">...</div> and the second script tag (the one with HOOK) on each page with this block.
