@@ -187,11 +187,19 @@ def main():
     score = {}
     for e in ENGINES:
         runs, ce = a["engines"][e], c["engines"][e]
-        named = [bool(ce["named"][i]) or runs[i]["named"] for i in range(3)]
+        # named if the exact name matched, or if the reading found it and quoted text that is really there
+        quoted = [any(len(m) > 2 and m in runs[i]["text"] for m in ce["mentions"][i]) for i in range(3)]
+        named = [runs[i]["named"] or (bool(ce["named"][i]) and quoted[i]) for i in range(3)]
         for i in range(3):
             if bool(ce["named"][i]) != runs[i]["named"]:
                 print(f"{slug} {e} ask {i + 1}: name match says {runs[i]['named']}, reading says {ce['named'][i]}; "
-                      f"counting it as named", file=sys.stderr)
+                      f"counting it as {'named' if named[i] else 'not named'}", file=sys.stderr)
+        if named != [bool(x) for x in ce["named"]]:  # the caption was written from the other reading: rewrite it
+            ce["caption"] = gpt(f"""Rewrite this one- or two-sentence caption for an AI search check page so it matches
+the facts: {e} named {a['business']} (call it "{short}") in {sum(named)} of its three asks (asks named: {named}).
+Keep the rest of the caption's observations if they still hold. {STYLE}
+Caption: {ce['caption']}
+Reply with JSON only: {{"caption": "..."}}""")["caption"]
         score[e] = (named, ce)
     total = sum(sum(n) for n, _ in score.values())
 
