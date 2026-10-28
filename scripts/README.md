@@ -27,3 +27,7 @@ The files are uploaded flat into `checks-kit/`. In the first Claude Code session
 ## Asking the engines
 
 `scripts/ask_engines.py` puts one question to ChatGPT, Claude and Google AI, three times each (score out of 9), and saves the answers as JSON and Markdown for the page. Google AI comes from Google AI Mode through DataForSEO, falling back to the AI Overview on the normal results when AI Mode gives no answer. It needs `OPENAI_API_KEY`, `DATAFORSEO_LOGIN` and `DATAFORSEO_PASSWORD`; Claude uses `ANTHROPIC_API_KEY` if set, otherwise the `claude` command line. Run `python3 scripts/ask_engines.py --help` for the options.
+
+## Site readiness
+
+`scripts/check_site.py <url>` runs a quick AI readiness check on a business website: AI crawler access in robots.txt, sitemap, llms.txt, schema markup, meta description, one H1, homepage word count, image alt text and FAQ content. It prints JSON with each check and a one-line `note`. For a business with no earlier audit, pass that note to `make_page.py --readiness` and the readiness cards are written from it.
