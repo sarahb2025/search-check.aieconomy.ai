@@ -39,7 +39,7 @@ def page_copy(a, need_readiness, readiness_note):
     answers = {e: [r["text"][:7000] for r in a["engines"][e]] for e in ENGINES}
     prompt = f"""You are writing the short copy for an "AI search check" page about one business.
 Business: {a['business']} (website {a['site']})
-Question put to each AI engine three times: "{a['question']}"
+{('Each engine was asked three different questions, one per ask: ' + json.dumps(a['questions'], ensure_ascii=False)) if a.get('questions') else 'Question put to each AI engine three times: "' + a['question'] + '"'}
 
 The nine answers, as JSON (engine -> [ask 1, ask 2, ask 3]):
 {json.dumps(answers, ensure_ascii=False)}
@@ -230,6 +230,8 @@ Reply with JSON only: {{"caption": "..."}}""")["caption"]
         runs = ""
         for i, r in enumerate(a["engines"][e]):
             body = to_html(clean(r["text"], e == "Google AI"))
+            if a.get("questions"):  # a different question on each ask: say which one
+                body = '<p><i>Asked: “%s”</i></p>' % html.escape(a["questions"][i], quote=False) + body
             if named[i]:
                 body = mark(body, ce["mentions"][i] + [a["business"], short, a["site"]])
             runs += '<div class="run%s" data-r="%d"><div class="body">%s</div></div>' % (" on" if i == 0 else "", i + 1, body)
