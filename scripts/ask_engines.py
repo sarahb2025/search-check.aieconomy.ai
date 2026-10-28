@@ -134,7 +134,11 @@ def main():
     ap.add_argument("--business", required=True)
     ap.add_argument("--alias", action="append", default=[], help="other names to count as a mention")
     ap.add_argument("--site", required=True, help="domain, e.g. woodproperty.com.au")
-    ap.add_argument("--question", required=True)
+    ap.add_argument("--question", required=True, action="append",
+                    help="give it 3 times to put a different question on each ask (e.g. one per region)")
+    ap.add_argument("--title", help="question shown on the page when there are several (default: the first)")
+    ap.add_argument("--match", action="append", default=[],
+                    help="names to match instead of business and aliases (for names that are common words)")
     ap.add_argument("--location", default="Australia", help="DataForSEO location_name")
     ap.add_argument("--country", default="AU")
     ap.add_argument("--city", default="")
@@ -142,12 +146,16 @@ def main():
     ap.add_argument("--out", default="/mnt/project-files/ai-answers")
     a = ap.parse_args()
 
-    terms = [a.business] + a.alias + [a.site]
-    fns = {"chatgpt": ("ChatGPT", lambda: ask_chatgpt(a.question, a.country, a.city)),
-           "claude": ("Claude", lambda: ask_claude(a.question)),
-           "google": ("Google AI", lambda: ask_google(a.question, a.location))}
+    terms = (a.match or [a.business] + a.alias) + [a.site]
+    qs = a.question
+    if len(qs) not in (1, ASKS):
+        sys.exit(f"give --question once or {ASKS} times")
+    fns = {"chatgpt": ("ChatGPT", lambda q: ask_chatgpt(q, a.country, a.city)),
+           "claude": ("Claude", lambda q: ask_claude(q)),
+           "google": ("Google AI", lambda q: ask_google(q, a.location))}
     date = datetime.date.today().isoformat()
-    res = {"slug": a.slug, "business": a.business, "site": a.site, "question": a.question,
+    res = {"slug": a.slug, "business": a.business, "site": a.site, "question": a.title or qs[0],
+           "questions": qs if len(qs) > 1 else None,
            "location": a.location, "date": date, "engines": {}}
     for key in a.engines.split(","):
         label, fn = fns[key]
@@ -155,13 +163,20 @@ def main():
         for n in range(1, ASKS + 1):
             for attempt in range(3):
                 try:
-                    run = fn()
+                    run = fn(qs[(n - 1) % len(qs)])
                     break
                 except Exception as e:  # network hiccup or engine error: retry, then record it
                     print(f"{label} ask {n} attempt {attempt + 1} failed: {e}", file=sys.stderr)
                     run = {"text": "", "source": "error", "error": str(e)}
                     time.sleep(2 ** attempt * 2)
-            run["names"] = extract_names(run["text"])
+            for attempt in range(3):
+                try:
+                    run["names"] = extract_names(run["text"])
+                    break
+                except Exception as e:  # same: retry, then go without the list of names
+                    print(f"{label} ask {n} names attempt {attempt + 1} failed: {e}", file=sys.stderr)
+                    run["names"] = []
+                    time.sleep(2 ** attempt * 2)
             run["named"] = named(run["text"], terms)
             runs.append(run)
             print(f"{label} ask {n}: {'NAMED' if run['named'] else 'not named'} ({run['source']}) "
@@ -175,10 +190,10 @@ def main():
     base = out / f"{a.slug}-{date}"
     base.with_suffix(".json").write_text(json.dumps(res, indent=1, ensure_ascii=False))
     md = [f"# {a.business}: AI answer check ({date})", "", f"Site: {a.site}", "",
-          f"Question: \"{a.question}\"", "", f"Named in {res['score']} of {res['out_of']} answers.", ""]
+          f"Question: \"{res['question']}\"", "", f"Named in {res['score']} of {res['out_of']} answers.", ""]
     for label, runs in res["engines"].items():
         for n, r in enumerate(runs, 1):
-            md += [f"## {label}, ask {n} ({r['source']})", "",
+            md += [f"## {label}, ask {n} ({r['source']})", ""] + ([f"Asked: \"{qs[n - 1]}\"", ""] if len(qs) > 1 else []) + [
                    f"Named: {'yes' if r['named'] else 'no'}. Names: {', '.join(r['names']) or 'none'}.", "",
                    r["text"] or "(no answer)", ""]
     base.with_suffix(".md").write_text("\n".join(md))
