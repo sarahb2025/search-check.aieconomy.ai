@@ -60,11 +60,13 @@ def ask_claude(q):
         u = d.get("usage", {})
         return {"text": text, "source": "Anthropic API, web search",
                 "tokens": u.get("input_tokens", 0) + u.get("output_tokens", 0), "cost": None}
+    # stdin closed: claude -p adds piped input to the prompt, so a batch loop reading a plan file would
+    # otherwise hand it the other rows (business names and all)
     with tempfile.TemporaryDirectory() as tmp:  # empty folder so the CLI sees no project files
         r = subprocess.run(["claude", "-p", q, "--output-format", "json", "--allowedTools", "WebSearch",
                             "--system-prompt", "You are Claude, a helpful assistant. Search the web when it helps "
                             "you give a current, accurate answer. Reply in plain prose as you would in a chat."],
-                           cwd=tmp, capture_output=True, text=True, timeout=600)
+                           cwd=tmp, stdin=subprocess.DEVNULL, capture_output=True, text=True, timeout=600)
     d = json.loads(r.stdout)
     return {"text": d.get("result", ""), "source": "Claude (claude CLI, web search)",
             "cost": d.get("total_cost_usd")}
